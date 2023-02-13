@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 01:17:08 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/13 11:47:29 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ int	main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 	if (init_table(&table, &params))
 		return (EXIT_FAILURE);
+	clear_nodes(&table);
 	return (EXIT_SUCCESS);
 }

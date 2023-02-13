@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 01:55:42 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/13 11:43:13 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	parse_params(int argc, char const *argv[], t_params *params)
 	if (!params)
 		return (EXIT_FAILURE);
 	reset_params(params);
-	if (parse_uint(argv[1], &params->philosophers))
+	if (parse_uint(argv[1], &params->philosophers) || !params->philosophers)
 		return (EXIT_FAILURE);
 	if (parse_uint(argv[2], &params->time_to_die))
 		return (EXIT_FAILURE);
