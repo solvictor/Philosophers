@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 13:15:10 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/13 18:08:16 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ typedef struct s_params {
 // A modif
 typedef struct s_philo {
 	unsigned int	n;
-	pthread_t		thread;
+	unsigned int	forks;
 	unsigned char	state;
+	pthread_t		thread;
 }				t_philo;
 
 typedef struct s_node {
@@ -59,5 +60,7 @@ bool	init_table(t_table *table, t_params *params);
 // Utils
 void	clear_nodes(t_table *table);
 void	reset_params(t_params *params);
+
+void	*philo_routine(void *philo);
 
 #endif

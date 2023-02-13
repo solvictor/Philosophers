@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 00:31:44 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/13 18:08:28 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static bool	add_philo(t_node **head, unsigned int n)
 	if (!head || !new)
 		return (EXIT_FAILURE);
 	new->philo.n = n;
+	new->philo.forks = 1;
+	new->philo.state = THINK;
 	new->prev = new;
 	new->next = new;
 	if (*head)
