@@ -6,11 +6,29 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 01:17:11 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/14 23:19:35 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+bool	has_dead(t_philo *start)
+{
+	t_philo	*tmp;
+
+	if (!start)
+		return (false);
+	if (start->state == DEAD)
+		return (true);
+	tmp = start->next;
+	while (tmp != start)
+	{
+		if (tmp->state == DEAD)
+			return (true);
+		tmp = tmp->next;
+	}
+	return (false);
+}
 
 void	reset_params(t_params *params)
 {
@@ -23,13 +41,13 @@ void	reset_params(t_params *params)
 
 void	clear_nodes(t_table *table)
 {
-	t_node	*tmp;
-	t_node	*list;
-	t_node	*first;
+	t_philo	*tmp;
+	t_philo	*list;
+	t_philo	*first;
 
-	if (!table->head)
+	if (!table->first)
 		return ;
-	first = table->head;
+	first = table->first;
 	list = first->next;
 	while (list && list != first)
 	{
@@ -38,5 +56,5 @@ void	clear_nodes(t_table *table)
 		list = tmp;
 	}
 	free(first);
-	table->head = NULL;
+	table->first = NULL;
 }

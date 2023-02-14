@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 18:08:16 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/15 00:01:32 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include <sys/time.h>
-# define EAT	0b001
-# define SLEEP	0b010
-# define THINK	0b100
+# define EAT	0b0001
+# define SLEEP	0b0010
+# define THINK	0b0100
+# define DEAD	0b1000
 
 typedef struct s_params {
 	unsigned int	philosophers;
@@ -32,23 +33,20 @@ typedef struct s_params {
 	unsigned int	time_must_eat;
 }				t_params;
 
-// A modif
 typedef struct s_philo {
+	struct s_philo	*prev;
 	unsigned int	n;
-	unsigned int	forks;
+	unsigned int	forks; // ptet inutile
 	unsigned char	state;
 	pthread_t		thread;
+	pthread_mutex_t	mutex;
+	t_params		params;
+	struct s_philo	*next;
 }				t_philo;
-
-typedef struct s_node {
-	struct s_node	*prev;
-	t_philo			philo;
-	struct s_node	*next;
-}				t_node;
 
 typedef struct s_table
 {
-	t_node	*head;
+	t_philo	*first;
 }				t_table;
 
 // Parser
@@ -60,6 +58,7 @@ bool	init_table(t_table *table, t_params *params);
 // Utils
 void	clear_nodes(t_table *table);
 void	reset_params(t_params *params);
+bool	has_dead(t_philo *start);
 
 void	*philo_routine(void *philo);
 
