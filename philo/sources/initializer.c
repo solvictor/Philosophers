@@ -6,49 +6,98 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/14 18:40:28 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/15 22:50:33 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static bool	add_philo(t_philo **head, unsigned int n)
+static t_philo	*new_philo(unsigned int n, t_params *params)
 {
 	t_philo	*new;
 
 	new = malloc(sizeof(t_philo));
-	if (!head || !new)
-		return (EXIT_FAILURE);
+	if (!new)
+		return (NULL);
 	new->n = n;
 	new->forks = 1;
 	new->state = THINK;
+	new->params = params;
 	new->prev = new;
 	new->next = new;
-	if (*head)
+	return (new);
+}
+
+bool	init_philos(t_philo **philos, t_params *params)
+{
+	unsigned int	i;
+	t_philo			*new;
+
+	if (!philos || !params)
+		return (EXIT_FAILURE);
+	i = 0;
+	while (i < params->philosophers)
 	{
-		new->next = *head;
-		new->prev = (*head)->prev;
-		(*head)->prev->next = new;
-		(*head)->prev = new;
+		new = new_philo(i + 1, params);
+		if (!new)
+			return (clear_nodes(philos), EXIT_FAILURE);
+		if (*philos)
+		{
+			new->next = *philos;
+			new->prev = (*philos)->prev;
+			(*philos)->prev->next = new;
+			(*philos)->prev = new;
+		}
+		else
+			*philos = new;
+		i++;
 	}
-	else
-		*head = new;
 	return (EXIT_SUCCESS);
 }
 
-bool	init_table(t_table *table, t_params *params)
+bool	init_mutexes(t_philo *philos, t_params *params)
 {
 	unsigned int	i;
 
-	if (!table || !params)
+	if (!philos || !params)
+		return (EXIT_FAILURE);
+	if (pthread_mutex_init(&params->print_mutex, NULL) != 0)
+		return (EXIT_FAILURE);
+	if (pthread_mutex_init(&params->died_mutex, NULL) != 0)
 		return (EXIT_FAILURE);
 	i = 0;
-	table->first = NULL;
 	while (i < params->philosophers)
 	{
-		if (add_philo(&table->first, i + 1))
-			return (clear_nodes(table), EXIT_FAILURE);
+		if (pthread_mutex_init(&philos->mutex, NULL) != 0)
+			return (EXIT_FAILURE);
+		philos = philos->next;
 		i++;
+	}
+	return (EXIT_SUCCESS);
+}
+
+bool	init_threads(t_philo *philos, t_params *params)
+{
+	unsigned int	i;
+	t_philo			*philo;
+
+	if (!philos || !params)
+		return (EXIT_FAILURE);
+	philo = philos;
+	i = 0;
+	while (i < params->philosophers)
+	{
+		pthread_create(&philo->thread, NULL, &philo_routine, (void *) philo);
+		i++;
+		philo = philo->next;
+	}
+	philo = philos;
+	i = 0;
+	while (i < params->philosophers)
+	{
+		pthread_join(philo->thread, NULL);
+		i++;
+		philo = philo->next;
 	}
 	return (EXIT_SUCCESS);
 }

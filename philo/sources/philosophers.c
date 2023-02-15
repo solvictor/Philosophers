@@ -6,83 +6,63 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/15 00:27:45 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/15 22:56:02 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	print_state(t_philo *philo, struct timeval *start)
+void	print_state(t_philo *philo, char *action)
 {
-	struct timeval	time;
+	const long	current = current_time_millis();
 
-	if (gettimeofday(&time, NULL) != 0)
+	if (current == 0 || !philo)
 		return ;
-	printf("Test %lums %u\n", (time.tv_usec - start->tv_usec) / 1000, philo->n);
+	pthread_mutex_lock(&philo->params->print_mutex);
+	printf("%ldms %u %s\n", current - philo->params->start, philo->n, action);
+	pthread_mutex_unlock(&philo->params->print_mutex);
 }
 
-void	*philo_routine(void *philo)
+void	*philo_routine(void *arg)
 {
-	t_philo			*phil;
-	struct timeval	start;
+	t_philo		*philo;
+	t_params	*params;
 
-	phil = (t_philo *) philo;
-	if (gettimeofday(&start, NULL) != 0)
+	philo = (t_philo *) arg;
+	params = philo->params;
+	params->start = current_time_millis();
+	if (!params->start)
 		return (NULL);
-	printf("Thread %u\n", phil->n);
-	pthread_mutex_init(&phil->mutex, NULL);
-	while (!has_dead(phil))
+	print_state(philo, "is eating");
+	while (true)
 	{
-		if (phil->state == THINK)
-		{
-			if (phil->forks == 1 && phil->next->forks == 1)
-			{
-				pthread_mutex_lock(&phil->mutex);
-				phil->forks++;
-				phil->next->forks--;
-				phil->state = EAT;
-				pthread_mutex_unlock(&phil->mutex);
-			}
-		}
-		else if (phil->state == SLEEP)
-		{
-
-		}
-		else if (phil->state == EAT)
-		{
-			
-		}
-		print_state(phil, &start);
+		pthread_mutex_lock(&params->died_mutex);
+		if (params->one_died)
+			break ;
+		pthread_mutex_unlock(&params->died_mutex);
+		
+		//print_state(philo, "is eating");
 	}
-	pthread_mutex_destroy(&phil->mutex);
+	pthread_mutex_unlock(&params->died_mutex);
+	pthread_mutex_destroy(&philo->mutex);
 	return (NULL);
 }
 
 int	main(int argc, char const *argv[])
 {
 	t_params	params;
-	t_table		table;
+	t_philo		*philos;
 
 	if (!(argc == 5 || argc == 6))
 		return (EXIT_FAILURE);
 	if (parse_params(argc, argv, &params))
 		return (EXIT_FAILURE);
-	if (init_table(&table, &params))
-		return (EXIT_FAILURE);
-	t_philo *cur = table.first;
-	for (size_t i = 0; i < params.philosophers; i++)
-	{
-		cur->params = params;
-		pthread_create(&cur->thread, NULL,
-			&philo_routine, (void *) cur);
-		cur = cur->next;
-	}
-	cur = table.first;
-	for (size_t i = 0; i < params.philosophers; i++)
-	{
-		pthread_join(cur->thread, NULL);
-		cur = cur->next;
-	}
-	clear_nodes(&table);
-	return (EXIT_SUCCESS);
+	philos = NULL;
+	if (init_philos(&philos, &params)
+		|| init_mutexes(philos, &params))
+		return (clear_nodes(&philos), EXIT_FAILURE);
+	init_threads(philos, &params);
+	pthread_mutex_destroy(&params.died_mutex);
+	pthread_mutex_destroy(&params.print_mutex);
+	return (clear_nodes(&philos), EXIT_SUCCESS);
 }

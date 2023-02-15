@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/15 00:01:32 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/15 22:54:15 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@
 # define DEAD	0b1000
 
 typedef struct s_params {
+	long			start;
+	bool			one_died;
+	pthread_mutex_t	died_mutex;
+	pthread_mutex_t	print_mutex;
 	unsigned int	philosophers;
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
@@ -36,30 +40,27 @@ typedef struct s_params {
 typedef struct s_philo {
 	struct s_philo	*prev;
 	unsigned int	n;
-	unsigned int	forks; // ptet inutile
+	unsigned int	forks;
 	unsigned char	state;
 	pthread_t		thread;
 	pthread_mutex_t	mutex;
-	t_params		params;
+	t_params		*params;
 	struct s_philo	*next;
 }				t_philo;
-
-typedef struct s_table
-{
-	t_philo	*first;
-}				t_table;
 
 // Parser
 bool	parse_params(int argc, char const *argv[], t_params *params);
 
 // Initializer
-bool	init_table(t_table *table, t_params *params);
+bool	init_philos(t_philo **philos, t_params *params);
+bool	init_mutexes(t_philo *philos, t_params *params);
+bool	init_threads(t_philo *philos, t_params *params);
 
 // Utils
-void	clear_nodes(t_table *table);
+void	clear_nodes(t_philo **philos);
 void	reset_params(t_params *params);
-bool	has_dead(t_philo *start);
-
+long	current_time_millis(void);
 void	*philo_routine(void *philo);
+
 
 #endif
