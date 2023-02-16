@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/16 02:20:49 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/16 22:33:58 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void	*philo_routine(void *arg)
 		if (params->one_died)
 			break ;
 		pthread_mutex_unlock(&params->died_mutex);
+		pthread_mutex_lock(&params->eat_mutex);
+		if (params->time_must_eat != 0 && params->eat_enough >= params->philosophers)
+			break ;
+		pthread_mutex_unlock(&params->eat_mutex);
 		if (current_time_millis() - philo->last_eat > params->time_to_die)
 		{
 			print_state(philo, "is dead");
@@ -59,15 +63,27 @@ void	*philo_routine(void *arg)
 		}
 		pthread_mutex_lock(&philo->fork_mutex);
 		print_state(philo, "has taken a fork");
-		if (philo->n == philo->next->n)
+		if (philo == philo->next)
 		{
 			usleep(params->time_to_die * 1000 + 1000);
 			continue ;
 		}
 		pthread_mutex_lock(&philo->next->fork_mutex);
 		print_state(philo, "has taken a fork");
-		print_state(philo, "is eating");
+		print_state(philo, "\033[0;32mis eating\e[m");
 		philo->last_eat = current_time_millis();
+		if (params->time_must_eat != 0)
+		{
+			philo->eats++;
+			if (params->time_must_eat == philo->eats)
+			{
+				pthread_mutex_lock(&params->eat_mutex);
+				params->eat_enough++;
+				if (params->eat_enough >= params->philosophers)
+					break ;
+				pthread_mutex_unlock(&params->eat_mutex);
+			}
+		}
 		usleep(params->time_to_eat);
 		pthread_mutex_unlock(&philo->fork_mutex);
 		pthread_mutex_unlock(&philo->next->fork_mutex);
@@ -99,5 +115,6 @@ int	main(int argc, char const *argv[])
 	init_threads(philos, &params);
 	pthread_mutex_destroy(&params.died_mutex);
 	pthread_mutex_destroy(&params.print_mutex);
+	pthread_mutex_destroy(&params.eat_mutex);
 	return (clear_nodes(&philos), EXIT_SUCCESS);
 }

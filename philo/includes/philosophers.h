@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/16 01:32:43 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/16 15:07:51 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ typedef struct s_params {
 	bool			one_died;
 	pthread_mutex_t	died_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	eat_mutex;
 	unsigned int	philosophers;
+	unsigned int	eat_enough;
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
@@ -35,11 +37,12 @@ typedef struct s_params {
 
 typedef struct s_philo {
 	struct s_philo	*prev;
-	unsigned int	n;
 	pthread_t		thread;
 	pthread_mutex_t	fork_mutex;
 	t_params		*params;
 	long			last_eat;
+	unsigned int	n;
+	unsigned int	eats;
 	struct s_philo	*next;
 }				t_philo;
 
