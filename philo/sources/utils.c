@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/15 22:44:41 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/17 17:30:32 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,25 @@ void	clear_nodes(t_philo **philos)
 	}
 	free(*philos);
 	*philos = NULL;
+}
+
+bool	destroy_mutexes(t_philo *philos, t_params *params)
+{
+	unsigned int	i;
+	bool			failed;
+
+	if (!philos || !params)
+		return (EXIT_FAILURE);
+	failed = false;
+	failed |= pthread_mutex_destroy(&params->print_mutex) != 0;
+	failed |= pthread_mutex_destroy(&params->died_mutex) != 0;
+	failed |= pthread_mutex_destroy(&params->eat_mutex) != 0;
+	i = 0;
+	while (i < params->philosophers)
+	{
+		failed |= pthread_mutex_destroy(&philos->fork_mutex) != 0;
+		philos = philos->next;
+		i++;
+	}
+	return (failed);
 }
