@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/16 15:11:03 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/17 19:21:40 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static t_philo	*new_philo(unsigned int n, t_params *params)
 	new->n = n;
 	new->params = params;
 	new->eats = 0;
+	new->forks = 1;
 	new->prev = new;
 	new->next = new;
 	return (new);

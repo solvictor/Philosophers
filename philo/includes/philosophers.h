@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/17 17:28:08 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/17 18:56:24 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/time.h>
 
 typedef struct s_params {
-	long			start;
 	bool			one_died;
 	pthread_mutex_t	died_mutex;
 	pthread_mutex_t	print_mutex;
@@ -40,9 +39,11 @@ typedef struct s_philo {
 	pthread_t		thread;
 	pthread_mutex_t	fork_mutex;
 	t_params		*params;
+	long			start;
 	long			last_eat;
 	unsigned int	n;
 	unsigned int	eats;
+	unsigned int	forks;
 	struct s_philo	*next;
 }				t_philo;
 
