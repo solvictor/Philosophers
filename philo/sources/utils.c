@@ -6,19 +6,19 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/17 17:30:32 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/20 17:41:56 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long	current_time_millis(void)
+long long	current_time_micros(void)
 {
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) != 0)
 		return (0);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
 
 void	reset_params(t_params *params)
