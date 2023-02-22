@@ -6,13 +6,13 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/20 17:41:56 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/22 01:05:45 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long long	current_time_micros(void)
+t_ullong	current_time_micros(void)
 {
 	struct timeval	tv;
 
@@ -63,9 +63,20 @@ bool	destroy_mutexes(t_philo *philos, t_params *params)
 	i = 0;
 	while (i < params->philosophers)
 	{
-		failed |= pthread_mutex_destroy(&philos->fork_mutex) != 0;
+		failed |= pthread_mutex_destroy(&philos->fork) != 0;
+		failed |= pthread_mutex_destroy(&philos->forks_mutex) != 0;
 		philos = philos->next;
 		i++;
 	}
 	return (failed);
+}
+
+void	ft_usleep(t_philo *philo, unsigned int micros)
+{
+	unsigned int	life;
+
+	life = philo->last_eat + philo->params->time_to_die - current_time_micros();
+	if (life < micros)
+		micros = life;
+	usleep(micros);
 }

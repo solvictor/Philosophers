@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/17 19:21:40 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/22 00:09:23 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_philo	*new_philo(unsigned int n, t_params *params)
 	new->n = n;
 	new->params = params;
 	new->eats = 0;
-	new->forks = 1;
+	new->forks = 0;
 	new->prev = new;
 	new->next = new;
 	return (new);
@@ -70,7 +70,9 @@ bool	init_mutexes(t_philo *philos, t_params *params)
 	i = 0;
 	while (i < params->philosophers)
 	{
-		if (pthread_mutex_init(&philos->fork_mutex, NULL) != 0)
+		if (pthread_mutex_init(&philos->fork, NULL) != 0)
+			return (EXIT_FAILURE);
+		if (pthread_mutex_init(&philos->forks_mutex, NULL) != 0)
 			return (EXIT_FAILURE);
 		philos = philos->next;
 		i++;
