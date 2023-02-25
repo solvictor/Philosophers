@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/22 01:05:18 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/23 20:27:47 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	*philo_routine(void *arg)
 {
 	t_philo			*philo;
 	t_params		*params;
+	bool			can_take_forks;
 	pthread_mutex_t	*first;
 	pthread_mutex_t	*second;
 	pthread_mutex_t	*first2;
@@ -82,7 +83,6 @@ void	*philo_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&params->died_mutex);
-		// Faire mieux
 		if (current_time_micros() - philo->last_eat >= params->time_to_die)
 		{
 			print_state(philo, "is dead");
@@ -92,15 +92,16 @@ void	*philo_routine(void *arg)
 		{
 			print_state(philo, "is thinking");
 			print_state(philo, "has taken a fork");
-			usleep(params->time_to_die + 1000);
+			ft_usleep(philo, params->time_to_die);
 			continue ;
 		}
 		pthread_mutex_lock(first2);
 		pthread_mutex_lock(second2);
-		if (philo->prev->forks != 1 && philo->next->forks != 1)
+		can_take_forks = philo->prev->forks == 0 && philo->next->forks == 0;
+		pthread_mutex_unlock(first2);
+		pthread_mutex_unlock(second2);
+		if (can_take_forks)
 		{
-			pthread_mutex_unlock(first2);
-			pthread_mutex_unlock(second2);
 			print_state(philo, "is thinking");
 			pthread_mutex_lock(&philo->forks_mutex);
 			philo->forks++;
@@ -108,7 +109,7 @@ void	*philo_routine(void *arg)
 			pthread_mutex_lock(first);
 			print_state(philo, "has taken a fork");
 			pthread_mutex_lock(&philo->forks_mutex);
-			philo->forks++;
+			philo->forks--;
 			pthread_mutex_unlock(&philo->forks_mutex);
 			pthread_mutex_lock(second);
 			print_state(philo, "has taken a fork");
@@ -117,16 +118,8 @@ void	*philo_routine(void *arg)
 			ft_usleep(philo, params->time_to_eat);
 			pthread_mutex_unlock(second);
 			pthread_mutex_unlock(first);
-			pthread_mutex_lock(&philo->forks_mutex);
-			philo->forks = 0;
-			pthread_mutex_unlock(&philo->forks_mutex);
 			print_state(philo, "is sleeping");
 			ft_usleep(philo, params->time_to_sleep);
-		}
-		else
-		{
-			pthread_mutex_unlock(first2);
-			pthread_mutex_unlock(second2);
 		}
 	}
 	return (NULL);
@@ -134,9 +127,9 @@ void	*philo_routine(void *arg)
 
 int	main(int argc, char const *argv[])
 {
+	int			state;
 	t_params	params;
 	t_philo		*philos;
-	int			state;
 
 	if (!(argc == 5 || argc == 6))
 		return (EXIT_FAILURE);
