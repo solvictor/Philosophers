@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/22 01:05:45 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/26 23:34:46 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,27 @@ t_ullong	current_time_micros(void)
 	return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
 
-void	reset_params(t_params *params)
+bool	check_stop(t_params *params)
 {
-	params->philosophers = 0;
-	params->time_to_die = 0;
-	params->time_to_eat = 0;
-	params->time_to_sleep = 0;
-	params->time_must_eat = 0;
-	params->one_died = false;
+	bool	stop;
+
+	pthread_mutex_lock(&params->died_mutex);
+	stop = params->one_died;
+	pthread_mutex_unlock(&params->died_mutex);
+	pthread_mutex_lock(&params->eat_mutex);
+	stop |= params->eat_enough >= params->philosophers;
+	pthread_mutex_unlock(&params->eat_mutex);
+	return (stop);
+}
+
+void	ft_usleep(t_philo *philo, unsigned int micros)
+{
+	unsigned int	life;
+
+	life = philo->last_eat + philo->params->time_to_die - current_time_micros();
+	if (life < micros)
+		micros = life;
+	usleep(micros);
 }
 
 void	clear_nodes(t_philo **philos)
@@ -69,14 +82,4 @@ bool	destroy_mutexes(t_philo *philos, t_params *params)
 		i++;
 	}
 	return (failed);
-}
-
-void	ft_usleep(t_philo *philo, unsigned int micros)
-{
-	unsigned int	life;
-
-	life = philo->last_eat + philo->params->time_to_die - current_time_micros();
-	if (life < micros)
-		micros = life;
-	usleep(micros);
 }

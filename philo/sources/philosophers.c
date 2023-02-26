@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/26 20:31:31 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/27 00:11:01 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,22 @@
 void	print_state(t_philo *philo, char *action)
 {
 	t_ullong	current;
+	t_params	*params;
 
-	pthread_mutex_lock(&philo->params->print_mutex);
-	pthread_mutex_lock(&philo->params->died_mutex);
-	if (philo->params->one_died)
-	{
-		pthread_mutex_unlock(&philo->params->died_mutex);
-		pthread_mutex_unlock(&philo->params->print_mutex);
+	params = philo->params;
+	if (check_stop(params))
 		return ;
-	}
+	pthread_mutex_lock(&params->died_mutex);
 	current = current_time_micros();
-	if (current - philo->last_eat >= philo->params->time_to_die)
+	if (current - philo->last_eat >= params->time_to_die)
 	{
 		action = "is dead";
-		philo->params->one_died = true;
+		params->one_died = true;
 	}
-	pthread_mutex_unlock(&philo->params->died_mutex);
+	pthread_mutex_unlock(&params->died_mutex);
+	pthread_mutex_lock(&params->print_mutex);
 	printf("%lldms %u %s\n", (current - philo->start) / 1000, philo->n, action);
-	pthread_mutex_unlock(&philo->params->print_mutex);
+	pthread_mutex_unlock(&params->print_mutex);
 }
 
 void	*philo_routine(void *arg)
@@ -76,19 +74,14 @@ void	*philo_routine(void *arg)
 	}
 	while (true)
 	{
-		pthread_mutex_lock(&params->died_mutex);
-		if (params->one_died)
-		{
-			pthread_mutex_unlock(&params->died_mutex);
+		if (check_stop(params))
 			break ;
-		}
-		pthread_mutex_unlock(&params->died_mutex);
 		if (current_time_micros() - philo->last_eat >= params->time_to_die)
 		{
 			print_state(philo, "is dead");
 			break ;
 		}
-		if (philo == philo->next)
+		if (params->philosophers == 1)
 		{
 			print_state(philo, "is thinking");
 			print_state(philo, "has taken a fork");
@@ -97,7 +90,7 @@ void	*philo_routine(void *arg)
 		}
 		pthread_mutex_lock(first2);
 		pthread_mutex_lock(second2);
-		can_take_forks = philo->prev->forks == 0 && philo->next->forks == 0;
+		can_take_forks = (philo->prev->forks == 0 && philo->next->forks == 0);
 		pthread_mutex_unlock(first2);
 		pthread_mutex_unlock(second2);
 		if (can_take_forks)
@@ -115,6 +108,17 @@ void	*philo_routine(void *arg)
 			print_state(philo, "has taken a fork");
 			print_state(philo, "is eating");
 			philo->last_eat = current_time_micros();
+			philo->eats++;
+			pthread_mutex_lock(&params->eat_mutex);
+			if (philo->eats == params->time_must_eat)
+				params->eat_enough++;
+			pthread_mutex_unlock(&params->eat_mutex);
+			if (check_stop(params))
+			{
+				pthread_mutex_unlock(second);
+				pthread_mutex_unlock(first);
+				break ;
+			}
 			ft_usleep(philo, params->time_to_eat);
 			pthread_mutex_unlock(second);
 			pthread_mutex_unlock(first);

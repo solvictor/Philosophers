@@ -6,11 +6,21 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/13 15:52:17 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/26 23:34:57 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static void	reset_params(t_params *params)
+{
+	params->philosophers = 0;
+	params->time_to_die = 0;
+	params->time_to_eat = 0;
+	params->time_to_sleep = 0;
+	params->time_must_eat = 0;
+	params->one_died = false;
+}
 
 static bool	parse_uint(char const *str, unsigned int *dst)
 {
