@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/22 01:04:38 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/26 20:15:54 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ bool		init_threads(t_philo *philos, t_params *params);
 
 // Utils
 void		*philo_routine(void *philo);
+void		*philo_routine2(void *philo);
 void		clear_nodes(t_philo **philos);
 void		reset_params(t_params *params);
 void		ft_usleep(t_philo *philo, unsigned int micros);
