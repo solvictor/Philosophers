@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/26 23:34:57 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/01 21:11:13 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 static void	reset_params(t_params *params)
 {
 	params->philosophers = 0;
+	params->synced = 0;
+	params->start = 0;
 	params->time_to_die = 0;
 	params->time_to_eat = 0;
 	params->time_to_sleep = 0;

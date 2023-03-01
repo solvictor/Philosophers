@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/26 23:34:46 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 00:10:31 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,13 @@ bool	check_stop(t_params *params)
 	return (stop);
 }
 
-void	ft_usleep(t_philo *philo, unsigned int micros)
+void	ft_usleep(unsigned int micros)
 {
-	unsigned int	life;
+	t_ullong	start;
 
-	life = philo->last_eat + philo->params->time_to_die - current_time_micros();
-	if (life < micros)
-		micros = life;
-	usleep(micros);
+	start = current_time_micros();
+	while (current_time_micros() - start < micros)
+		usleep(5);
 }
 
 void	clear_nodes(t_philo **philos)
@@ -70,12 +69,14 @@ bool	destroy_mutexes(t_philo *philos, t_params *params)
 	if (!philos || !params)
 		return (EXIT_FAILURE);
 	failed = false;
+	failed |= pthread_mutex_destroy(&params->sync) != 0;
 	failed |= pthread_mutex_destroy(&params->print_mutex) != 0;
 	failed |= pthread_mutex_destroy(&params->died_mutex) != 0;
 	failed |= pthread_mutex_destroy(&params->eat_mutex) != 0;
 	i = 0;
 	while (i < params->philosophers)
 	{
+		failed |= pthread_mutex_destroy(&philos->prev_eat) != 0;
 		failed |= pthread_mutex_destroy(&philos->fork) != 0;
 		failed |= pthread_mutex_destroy(&philos->forks_mutex) != 0;
 		philos = philos->next;
