@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/01 23:55:52 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:18:47 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ bool		init_threads(t_philo *philos, t_params *params);
 bool		all_synced(t_params *params);
 void		sync_thread(t_params *params);
 void		set_start(t_philo *philos, t_params *params);
+
+// Routines
+void		*philo_routine(void *arg);
+void		watcher(t_philo *philos, t_params *params);
 
 // Utils
 void		*philo_routine(void *philo);
