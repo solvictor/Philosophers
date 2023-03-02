@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   synchronizer.c                                     :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:14:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 01:43:11 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:59:55 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,24 @@ void	set_start(t_philo *philos, t_params *params)
 		i++;
 	}
 	pthread_mutex_unlock(&params->sync);
+}
+
+// TODO Voir
+void	ft_usleep(unsigned int micros)
+{
+	t_ullong	start;
+
+	//start = current_time_micros();
+	//while (current_time_micros() - start < micros)
+	//	usleep(5);
+	usleep(micros);
+}
+
+t_ullong	current_time_micros(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL) != 0)
+		return (0);
+	return (tv.tv_sec * 1000000 + tv.tv_usec);
 }

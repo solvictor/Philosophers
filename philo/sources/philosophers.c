@@ -6,13 +6,12 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:22:34 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:49:59 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// TODO Ils ont pas tous manger
 int	main(int argc, char const *argv[])
 {
 	int			state;
@@ -27,8 +26,7 @@ int	main(int argc, char const *argv[])
 	params.time_to_eat *= 1000;
 	params.time_to_sleep *= 1000;
 	params.time_to_die *= 1000;
-	if (init_philos(&philos, &params)
-		|| init_mutexes(philos, &params))
+	if (init_philos(&philos, &params) || init_mutexes(philos, &params))
 		return (clear_nodes(&philos), EXIT_FAILURE);
 	init_threads(philos, &params);
 	state = destroy_mutexes(philos, &params);

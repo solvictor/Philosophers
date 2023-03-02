@@ -29,7 +29,7 @@ WHITE		=	\033[0;97m
 
 # Sources
 
-SRC_FILES	=	philosophers parser initializer synchronizer routines utils
+SRC_FILES	=	philosophers parser initializer time routines utils
 
 
 SRC			=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))

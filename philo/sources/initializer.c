@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 01:46:48 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:48:41 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,20 @@ bool	init_mutexes(t_philo *philos, t_params *params)
 	return (EXIT_SUCCESS);
 }
 
-bool	init_threads(t_philo *philos, t_params *params)
+void	init_threads(t_philo *philos, t_params *params)
 {
 	unsigned int	i;
-	t_philo			*philo;
 
-	if (!philos || !params)
-		return (EXIT_FAILURE);
-	philo = philos;
 	i = 0;
 	while (i < params->philosophers)
 	{
-		if (pthread_create(&philo->thread,
-				NULL, &philo_routine, (void *) philo) != 0)
-			return (params->one_died = true, EXIT_FAILURE);
-		philo = philo->next;
+		if (pthread_create(&philos->thread,
+				NULL, &philo_routine, (void *) philos) != 0)
+		{
+			params->one_died = true;
+			return ;
+		}
+		philos = philos->next;
 		i++;
 	}
 	set_start(philos, params);
@@ -107,9 +106,9 @@ bool	init_threads(t_philo *philos, t_params *params)
 	i = 0;
 	while (i < params->philosophers)
 	{
-		pthread_join(philo->thread, NULL);
-		philo = philo->next;
+		pthread_join(philos->thread, NULL);
+		philos = philos->next;
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return ;
 }

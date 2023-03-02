@@ -6,41 +6,23 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 01:10:15 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:54:08 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-t_ullong	current_time_micros(void)
+void	print_state(t_philo *philo, char *action)
 {
-	struct timeval	tv;
+	t_params	*params;
 
-	if (gettimeofday(&tv, NULL) != 0)
-		return (0);
-	return (tv.tv_sec * 1000000 + tv.tv_usec);
-}
-
-bool	check_stop(t_params *params)
-{
-	bool	stop;
-
-	pthread_mutex_lock(&params->died_mutex);
-	stop = params->one_died;
-	pthread_mutex_unlock(&params->died_mutex);
-	pthread_mutex_lock(&params->eat_mutex);
-	stop |= params->eat_enough >= params->philosophers;
-	pthread_mutex_unlock(&params->eat_mutex);
-	return (stop);
-}
-
-void	ft_usleep(unsigned int micros)
-{
-	t_ullong	start;
-
-	start = current_time_micros();
-	while (current_time_micros() - start < micros)
-		usleep(5);
+	params = philo->params;
+	if (check_stop(params))
+		return ;
+	pthread_mutex_lock(&params->print_mutex);
+	printf("%lldms %u %s\n",
+		(current_time_micros() - params->start) / 1000, philo->n, action);
+	pthread_mutex_unlock(&params->print_mutex);
 }
 
 void	clear_nodes(t_philo **philos)
@@ -59,6 +41,19 @@ void	clear_nodes(t_philo **philos)
 	}
 	free(*philos);
 	*philos = NULL;
+}
+
+bool	check_stop(t_params *params)
+{
+	bool	stop;
+
+	pthread_mutex_lock(&params->died_mutex);
+	stop = params->one_died;
+	pthread_mutex_unlock(&params->died_mutex);
+	pthread_mutex_lock(&params->eat_mutex);
+	stop |= params->eat_enough >= params->philosophers;
+	pthread_mutex_unlock(&params->eat_mutex);
+	return (stop);
 }
 
 bool	destroy_mutexes(t_philo *philos, t_params *params)

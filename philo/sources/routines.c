@@ -6,24 +6,11 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:39:50 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:53:57 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-static void	print_state(t_philo *philo, char *action)
-{
-	t_params	*params;
-
-	params = philo->params;
-	if (check_stop(params))
-		return ;
-	pthread_mutex_lock(&params->print_mutex);
-	printf("%lldms %u %s\n",
-		(current_time_micros() - params->start) / 1000, philo->n, action);
-	pthread_mutex_unlock(&params->print_mutex);
-}
 
 static void	eat(t_philo *philo)
 {

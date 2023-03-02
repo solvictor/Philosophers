@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:18:47 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 18:55:55 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ typedef struct s_philo {
 bool		parse_params(int argc, char const *argv[], t_params *params);
 
 // Initializer
+void		init_threads(t_philo *philos, t_params *params);
 bool		init_philos(t_philo **philos, t_params *params);
 bool		init_mutexes(t_philo *philos, t_params *params);
-bool		init_threads(t_philo *philos, t_params *params);
 
 // Syncer
 bool		all_synced(t_params *params);
@@ -71,12 +71,13 @@ void		*philo_routine(void *arg);
 void		watcher(t_philo *philos, t_params *params);
 
 // Utils
-void		*philo_routine(void *philo);
+t_ullong	current_time_micros(void);
 bool		check_stop(t_params *params);
+bool		destroy_mutexes(t_philo *philos, t_params *params);
+void		*philo_routine(void *philo);
 void		clear_nodes(t_philo **philos);
 void		ft_usleep(unsigned int micros);
+void		print_state(t_philo *philo, char *action);
 void		watcher(t_philo *philos, t_params *params);
-bool		destroy_mutexes(t_philo *philos, t_params *params);
-t_ullong	current_time_micros(void);
 
 #endif
