@@ -1,6 +1,6 @@
 # Variables
 
-NAME		= philo
+NAME		= philo_bonus
 INCLUDE		= includes
 SRC_DIR		= sources/
 OBJ_DIR		= objects/
