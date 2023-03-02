@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/01 21:11:13 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 01:09:58 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	reset_params(t_params *params)
 	params->time_to_die = 0;
 	params->time_to_eat = 0;
 	params->time_to_sleep = 0;
+	params->eat_enough = 0;
 	params->time_must_eat = 0;
 	params->one_died = false;
 }

@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 00:15:18 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/02 01:07:40 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ void	watcher(t_philo *philos, t_params *params)
 	current = 0;
 	while (true)
 	{
-		if (current == 0)
-			printf("MON\n");
 		pthread_mutex_lock(&philos->prev_eat);
 		current = current_time_micros();
 		if (current - philos->last_eat >= params->time_to_die)
@@ -137,12 +135,15 @@ void	watcher(t_philo *philos, t_params *params)
 			pthread_mutex_lock(&params->died_mutex);
 			params->one_died = true;
 			pthread_mutex_unlock(&params->died_mutex);
+			printf("%lldms %u died\n",
+				(current - params->start) / 1000, philos->n);
 			break ;
 		}
 		pthread_mutex_unlock(&philos->prev_eat);
+		if (check_stop(params))
+			break ;
 		philos = philos->next;
 	}
-	printf("%lldms %u is died\n", (current - params->start) / 1000, philos->n);
 }
 
 int	main(int argc, char const *argv[])
