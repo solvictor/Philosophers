@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:53:57 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/08 14:59:55 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static void	eat(t_philo *philo)
 	philo->eats++;
 	if (philo->eats == philo->params->time_must_eat)
 	{
-		pthread_mutex_lock(&philo->params->eat_mutex);
+		pthread_mutex_lock(&philo->params->eat);
 		philo->params->eat_enough++;
-		pthread_mutex_unlock(&philo->params->eat_mutex);
+		pthread_mutex_unlock(&philo->params->eat);
 	}
 	ft_usleep(philo->params->time_to_eat);
 }
@@ -68,7 +68,7 @@ void	*philo_routine(void *arg)
 
 void	watcher(t_philo *philos, t_params *params)
 {
-	t_ullong	time;
+	t_ulong	time;
 
 	ft_usleep(20000);
 	while (true)
@@ -78,10 +78,10 @@ void	watcher(t_philo *philos, t_params *params)
 		if (time - philos->last_eat >= params->time_to_die)
 		{
 			pthread_mutex_unlock(&philos->prev_eat);
-			pthread_mutex_lock(&params->died_mutex);
-			params->one_died = true;
-			pthread_mutex_unlock(&params->died_mutex);
-			printf("%lldms %u died\n", (time - params->start) / 1000, philos->n);
+			pthread_mutex_lock(&params->exit);
+			params->should_exit = true;
+			pthread_mutex_unlock(&params->exit);
+			printf("%lums %u died\n", (time - params->start) / 1000, philos->n);
 			break ;
 		}
 		pthread_mutex_unlock(&philos->prev_eat);

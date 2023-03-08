@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:14:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:59:55 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/08 14:55:55 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	set_start(t_philo *philos, t_params *params)
 // TODO Voir
 void	ft_usleep(unsigned int micros)
 {
-	t_ullong	start;
+	t_ulong	start;
 
 	//start = current_time_micros();
 	//while (current_time_micros() - start < micros)
@@ -62,7 +62,7 @@ void	ft_usleep(unsigned int micros)
 	usleep(micros);
 }
 
-t_ullong	current_time_micros(void)
+t_ulong	current_time_micros(void)
 {
 	struct timeval	tv;
 

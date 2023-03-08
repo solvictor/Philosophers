@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:54:08 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/08 15:12:46 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	print_state(t_philo *philo, char *action)
 	params = philo->params;
 	if (check_stop(params))
 		return ;
-	pthread_mutex_lock(&params->print_mutex);
-	printf("%lldms %u %s\n",
+	pthread_mutex_lock(&params->display);
+	printf("%lums %u %s\n",
 		(current_time_micros() - params->start) / 1000, philo->n, action);
-	pthread_mutex_unlock(&params->print_mutex);
+	pthread_mutex_unlock(&params->display);
 }
 
 void	clear_nodes(t_philo **philos)
@@ -47,12 +47,12 @@ bool	check_stop(t_params *params)
 {
 	bool	stop;
 
-	pthread_mutex_lock(&params->died_mutex);
-	stop = params->one_died;
-	pthread_mutex_unlock(&params->died_mutex);
-	pthread_mutex_lock(&params->eat_mutex);
+	pthread_mutex_lock(&params->exit);
+	stop = params->should_exit;
+	pthread_mutex_unlock(&params->exit);
+	pthread_mutex_lock(&params->eat);
 	stop |= params->eat_enough >= params->philosophers;
-	pthread_mutex_unlock(&params->eat_mutex);
+	pthread_mutex_unlock(&params->eat);
 	return (stop);
 }
 
@@ -65,9 +65,9 @@ bool	destroy_mutexes(t_philo *philos, t_params *params)
 		return (EXIT_FAILURE);
 	failed = false;
 	failed |= pthread_mutex_destroy(&params->sync) != 0;
-	failed |= pthread_mutex_destroy(&params->print_mutex) != 0;
-	failed |= pthread_mutex_destroy(&params->died_mutex) != 0;
-	failed |= pthread_mutex_destroy(&params->eat_mutex) != 0;
+	failed |= pthread_mutex_destroy(&params->display) != 0;
+	failed |= pthread_mutex_destroy(&params->exit) != 0;
+	failed |= pthread_mutex_destroy(&params->eat) != 0;
 	i = 0;
 	while (i < params->philosophers)
 	{

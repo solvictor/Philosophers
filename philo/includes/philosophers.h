@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/02 18:55:55 by vegret           ###   ########.fr       */
+/*   Updated: 2023/03/08 14:58:21 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef unsigned long long	t_ullong;
+typedef unsigned long	t_ulong;
 
 typedef struct s_params {
-	bool			one_died;
-	pthread_mutex_t	died_mutex;
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	eat_mutex;
+	bool			should_exit;
+	pthread_mutex_t	exit;
+	pthread_mutex_t	display;
+	pthread_mutex_t	eat;
 	pthread_mutex_t	sync;
 	unsigned int	synced;
-	t_ullong		start;
+	t_ulong			start;
 	unsigned int	philosophers;
 	unsigned int	eat_enough;
 	unsigned int	time_to_die;
@@ -46,7 +46,7 @@ typedef struct s_philo {
 	pthread_mutex_t	fork;
 	pthread_mutex_t	forks_mutex;
 	t_params		*params;
-	t_ullong		last_eat;
+	t_ulong			last_eat;
 	unsigned int	n;
 	unsigned int	eats;
 	unsigned int	forks;
@@ -54,30 +54,30 @@ typedef struct s_philo {
 }				t_philo;
 
 // Parser
-bool		parse_params(int argc, char const *argv[], t_params *params);
+bool	parse_params(int argc, char const *argv[], t_params *params);
 
 // Initializer
-void		init_threads(t_philo *philos, t_params *params);
-bool		init_philos(t_philo **philos, t_params *params);
-bool		init_mutexes(t_philo *philos, t_params *params);
+bool	init_threads(t_philo *philos, t_params *params);
+bool	init_philos(t_philo **philos, t_params *params);
+bool	init_mutexes(t_philo *philos, t_params *params);
 
 // Syncer
-bool		all_synced(t_params *params);
-void		sync_thread(t_params *params);
-void		set_start(t_philo *philos, t_params *params);
+bool	all_synced(t_params *params);
+void	sync_thread(t_params *params);
+void	set_start(t_philo *philos, t_params *params);
 
 // Routines
-void		*philo_routine(void *arg);
-void		watcher(t_philo *philos, t_params *params);
+void	*philo_routine(void *arg);
+void	watcher(t_philo *philos, t_params *params);
 
 // Utils
-t_ullong	current_time_micros(void);
-bool		check_stop(t_params *params);
-bool		destroy_mutexes(t_philo *philos, t_params *params);
-void		*philo_routine(void *philo);
-void		clear_nodes(t_philo **philos);
-void		ft_usleep(unsigned int micros);
-void		print_state(t_philo *philo, char *action);
-void		watcher(t_philo *philos, t_params *params);
+t_ulong	current_time_micros(void);
+bool	check_stop(t_params *params);
+bool	destroy_mutexes(t_philo *philos, t_params *params);
+void	*philo_routine(void *philo);
+void	clear_nodes(t_philo **philos);
+void	ft_usleep(unsigned int micros);
+void	print_state(t_philo *philo, char *action);
+void	watcher(t_philo *philos, t_params *params);
 
 #endif
