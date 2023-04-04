@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 14:58:33 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/04 14:21:13 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,8 @@ bool	parse_params(int argc, char const *argv[], t_params *params)
 		return (EXIT_FAILURE);
 	if (parse_uint(argv[4], &params->time_to_sleep) || !params->time_to_sleep)
 		return (EXIT_FAILURE);
-	if (argc == 6)
-		if (parse_uint(argv[5], &params->time_must_eat)
-			|| !params->time_must_eat)
-			return (EXIT_FAILURE);
+	if (argc == 6 && (parse_uint(argv[5], &params->time_must_eat)
+			|| !params->time_must_eat))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

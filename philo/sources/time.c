@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:14:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 14:55:55 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:49:07 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,6 @@ void	set_start(t_philo *philos, t_params *params)
 		i++;
 	}
 	pthread_mutex_unlock(&params->sync);
-}
-
-// TODO Voir
-void	ft_usleep(unsigned int micros)
-{
-	t_ulong	start;
-
-	//start = current_time_micros();
-	//while (current_time_micros() - start < micros)
-	//	usleep(5);
-	usleep(micros);
 }
 
 t_ulong	current_time_micros(void)

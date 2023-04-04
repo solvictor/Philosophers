@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 14:58:21 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:49:03 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ bool	check_stop(t_params *params);
 bool	destroy_mutexes(t_philo *philos, t_params *params);
 void	*philo_routine(void *philo);
 void	clear_nodes(t_philo **philos);
-void	ft_usleep(unsigned int micros);
 void	print_state(t_philo *philo, char *action);
 void	watcher(t_philo *philos, t_params *params);
 

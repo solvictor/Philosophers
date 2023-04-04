@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 14:59:55 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:48:41 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	eat(t_philo *philo)
 		philo->params->eat_enough++;
 		pthread_mutex_unlock(&philo->params->eat);
 	}
-	ft_usleep(philo->params->time_to_eat);
+	usleep(philo->params->time_to_eat);
 }
 
 static bool	take_forks(t_philo *philo)
@@ -49,7 +49,7 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *) arg;
 	sync_thread(philo->params);
 	if (philo->n % 2 == 0)
-		ft_usleep(10000);
+		usleep(10000);
 	while (true)
 	{
 		if (check_stop(philo->params))
@@ -60,7 +60,7 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(&philo->next->fork);
 		pthread_mutex_unlock(&philo->fork);
 		print_state(philo, "is sleeping");
-		ft_usleep(philo->params->time_to_sleep);
+		usleep(philo->params->time_to_sleep);
 		print_state(philo, "is thinking");
 	}
 	return (NULL);
@@ -70,7 +70,7 @@ void	watcher(t_philo *philos, t_params *params)
 {
 	t_ulong	time;
 
-	ft_usleep(20000);
+	usleep(20000);
 	while (true)
 	{
 		pthread_mutex_lock(&philos->prev_eat);
