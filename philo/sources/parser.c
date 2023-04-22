@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:16:43 by vegret            #+#    #+#             */
-/*   Updated: 2023/04/04 14:21:13 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:08:47 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ static bool	parse_uint(char const *str, unsigned int *dst)
 	{
 		if (str[i] < '0' || str[i] > '9' || res > UINT_MAX - 1)
 			return (EXIT_FAILURE);
-		else
-		{
-			res = res * 10 + str[i] - '0';
-		}
+		res = res * 10 + str[i] - '0';
 		i++;
 	}
 	if (res > UINT_MAX - 1)

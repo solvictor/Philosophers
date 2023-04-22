@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 14:47:45 by vegret           ###   ########.fr       */
+/*   Updated: 2023/04/19 18:17:06 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char const *argv[])
 	t_params	params;
 	t_philo		*philos;
 
-	if (!(argc == 5 || argc == 6))
+	if (argc < 5 || argc > 6)
 		return (EXIT_FAILURE);
 	if (parse_params(argc, argv, &params))
 		return (EXIT_FAILURE);
