@@ -40,8 +40,6 @@ OBJF		=	.cache_exists
 
 all:		$(NAME)
 
-bonus:		
-
 $(NAME):	$(OBJ)
 			@$(CC) $(CFLAGS) $(OBJ) -pthread -o $(NAME)
 			@echo "$(GREEN)$(BOLD)$(NAME) compiled!$(DEF_COLOR)"

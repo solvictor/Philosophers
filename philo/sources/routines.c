@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/04/04 16:48:41 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/04 19:24:48 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ void	watcher(t_philo *philos, t_params *params)
 			pthread_mutex_lock(&params->exit);
 			params->should_exit = true;
 			pthread_mutex_unlock(&params->exit);
+			pthread_mutex_lock(&params->display);
 			printf("%lums %u died\n", (time - params->start) / 1000, philos->n);
+			pthread_mutex_unlock(&params->display);
 			break ;
 		}
 		pthread_mutex_unlock(&philos->prev_eat);
