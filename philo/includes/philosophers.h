@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/04/04 16:49:03 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/05 15:41:40 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_philo {
 	t_ulong			last_eat;
 	unsigned int	n;
 	unsigned int	eats;
-	unsigned int	forks;
 	struct s_philo	*next;
 }				t_philo;
 
@@ -62,7 +61,6 @@ bool	init_philos(t_philo **philos, t_params *params);
 bool	init_mutexes(t_philo *philos, t_params *params);
 
 // Syncer
-bool	all_synced(t_params *params);
 void	sync_thread(t_params *params);
 void	set_start(t_philo *philos, t_params *params);
 

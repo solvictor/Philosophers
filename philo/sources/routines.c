@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/04 19:24:48 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/05 15:30:12 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *) arg;
 	sync_thread(philo->params);
-	if (philo->n % 2 == 0)
+	if (philo->n & 1)
 		usleep(10000);
 	while (true)
 	{

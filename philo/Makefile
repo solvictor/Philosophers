@@ -5,7 +5,7 @@ INCLUDE		= includes
 SRC_DIR		= sources/
 OBJ_DIR		= objects/
 CC			= cc
-CFLAGS		= -Wall -Wextra 
+CFLAGS		= -Wall -Wextra
 RM			= rm -f
 SMAKE		= make --no-print-directory
 

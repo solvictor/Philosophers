@@ -6,13 +6,13 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:14:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/04/04 16:49:07 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/05 15:41:29 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	all_synced(t_params *params)
+static bool	all_synced(t_params *params)
 {
 	bool	all_synced;
 
