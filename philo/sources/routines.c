@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/05 15:30:12 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/11 14:35:03 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,24 @@ static void	eat(t_philo *philo)
 
 static bool	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->fork);
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	first = &philo->fork;
+	second = &philo->next->fork;
+	if (philo->n % 2)
+	{
+		first = &philo->next->fork;
+		second = &philo->fork;
+	}
+	pthread_mutex_lock(first);
 	print_state(philo, "has taken a fork");
 	if (philo->params->philosophers == 1)
 	{
-		pthread_mutex_unlock(&philo->fork);
+		pthread_mutex_unlock(first);
 		return (EXIT_FAILURE);
 	}
-	pthread_mutex_lock(&philo->next->fork);
+	pthread_mutex_lock(second);
 	print_state(philo, "has taken a fork");
 	return (EXIT_SUCCESS);
 }
@@ -62,6 +72,7 @@ void	*philo_routine(void *arg)
 		print_state(philo, "is sleeping");
 		usleep(philo->params->time_to_sleep);
 		print_state(philo, "is thinking");
+		usleep(1000);
 	}
 	return (NULL);
 }
