@@ -73,4 +73,4 @@ norm:
 				print "$(LIGHT_RED)"$$0"$(END)" \
 			} else { print }}'
 
-.PHONY:		all clean fclean re norm bonus
+.PHONY:		all clean fclean re norm
