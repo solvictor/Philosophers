@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:49:48 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/12 17:31:04 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/13 11:36:30 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char const *argv[])
 {
-	int			state;
+	int			error;
 	t_params	params;
 	t_philo		*philos;
 
@@ -28,9 +28,9 @@ int	main(int argc, char const *argv[])
 	params.time_to_die *= 1000;
 	if (init_philos(&philos, &params))
 		return (clear_nodes(&philos), EXIT_FAILURE);
-	state = init_mutexes(philos, &params);
-	if (!state)
-		state |= init_threads(philos, &params);
-	state |= destroy_mutexes(philos, &params);
-	return (clear_nodes(&philos), state);
+	error = init_mutexes(philos, &params);
+	if (!error)
+		error |= init_threads(philos, &params);
+	error |= destroy_mutexes(philos, &params);
+	return (clear_nodes(&philos), error);
 }
