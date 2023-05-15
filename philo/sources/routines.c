@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/11 14:59:28 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/15 15:37:50 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,27 @@ static void	eat(t_philo *philo)
 	usleep(philo->params->time_to_eat);
 }
 
-static bool	take_forks(t_philo *philo)
+static void	choose_forks(t_philo *philo)
 {
-	pthread_mutex_t	*first;
-	pthread_mutex_t	*second;
-
-	first = &philo->fork;
-	second = &philo->next->fork;
+	philo->first = &philo->fork;
+	philo->second = &philo->next->fork;
 	if (philo->n % 2)
 	{
-		first = &philo->next->fork;
-		second = &philo->fork;
+		philo->first = &philo->next->fork;
+		philo->second = &philo->fork;
 	}
-	pthread_mutex_lock(first);
+}
+
+static bool	take_forks(t_philo *philo)
+{
+	pthread_mutex_lock(philo->first);
 	print_state(philo, "has taken a fork");
 	if (philo->params->philosophers == 1)
 	{
-		pthread_mutex_unlock(first);
+		pthread_mutex_unlock(philo->first);
 		return (EXIT_FAILURE);
 	}
-	pthread_mutex_lock(second);
+	pthread_mutex_lock(philo->second);
 	print_state(philo, "has taken a fork");
 	return (EXIT_SUCCESS);
 }
@@ -57,6 +58,7 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
+	choose_forks(philo);
 	sync_thread(philo->params);
 	if (philo->n & 1)
 		usleep(10000);
@@ -72,7 +74,7 @@ void	*philo_routine(void *arg)
 		print_state(philo, "is sleeping");
 		usleep(philo->params->time_to_sleep);
 		print_state(philo, "is thinking");
-		usleep(500);
+		usleep(10);
 	}
 	return (NULL);
 }
