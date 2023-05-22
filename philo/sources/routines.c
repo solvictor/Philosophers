@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 18:16:51 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/15 15:37:50 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/22 18:46:27 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	*philo_routine(void *arg)
 		print_state(philo, "is sleeping");
 		usleep(philo->params->time_to_sleep);
 		print_state(philo, "is thinking");
-		usleep(10);
+		usleep(1000);
 	}
 	return (NULL);
 }

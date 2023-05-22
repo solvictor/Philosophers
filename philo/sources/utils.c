@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/03/08 15:12:46 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/22 18:51:01 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	check_stop(t_params *params)
 	stop = params->should_exit;
 	pthread_mutex_unlock(&params->exit);
 	pthread_mutex_lock(&params->eat);
-	stop |= params->eat_enough >= params->philosophers;
+	stop = params->eat_enough >= params->philosophers;
 	pthread_mutex_unlock(&params->eat);
 	return (stop);
 }
