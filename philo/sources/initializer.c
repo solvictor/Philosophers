@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/05 15:39:09 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/23 15:33:04 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,7 @@ bool	init_threads(t_philo *philos, t_params *params)
 	i = 0;
 	while (i < params->philosophers)
 	{
-		if (pthread_create(&philos->thread,
-				NULL, &philo_routine, (void *) philos) != 0)
+		if (pthread_create(&philos->thread, NULL, &philo_routine, philos) != 0)
 		{
 			params->should_exit = true;
 			return (EXIT_FAILURE);
