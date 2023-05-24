@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:45:21 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/15 15:33:09 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/24 18:35:25 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_philo {
 	pthread_t		thread;
 	pthread_mutex_t	prev_eat;
 	pthread_mutex_t	fork;
-	pthread_mutex_t	forks_mutex;
 	pthread_mutex_t	*first;
 	pthread_mutex_t	*second;
 	t_params		*params;
@@ -78,5 +77,6 @@ void	*philo_routine(void *philo);
 void	clear_nodes(t_philo **philos);
 void	print_state(t_philo *philo, char *action);
 void	watcher(t_philo *philos, t_params *params);
+void	ft_usleep(t_philo *philo, unsigned int micros);
 
 #endif

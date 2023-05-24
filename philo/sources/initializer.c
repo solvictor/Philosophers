@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:29:49 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/23 15:33:04 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/24 18:45:41 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ bool	init_mutexes(t_philo *philos, t_params *params)
 	{
 		failed |= pthread_mutex_init(&philos->prev_eat, NULL) != 0;
 		failed |= pthread_mutex_init(&philos->fork, NULL) != 0;
-		failed |= pthread_mutex_init(&philos->forks_mutex, NULL) != 0;
 		philos = philos->next;
 		i++;
 	}

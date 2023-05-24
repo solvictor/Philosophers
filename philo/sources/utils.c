@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:31:57 by vegret            #+#    #+#             */
-/*   Updated: 2023/05/23 15:35:24 by vegret           ###   ########.fr       */
+/*   Updated: 2023/05/24 18:48:00 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,19 @@ bool	destroy_mutexes(t_philo *philos, t_params *params)
 	{
 		failed |= pthread_mutex_destroy(&philos->prev_eat) != 0;
 		failed |= pthread_mutex_destroy(&philos->fork) != 0;
-		failed |= pthread_mutex_destroy(&philos->forks_mutex) != 0;
 		philos = philos->next;
 		i++;
 	}
 	return (failed);
+}
+
+void	ft_usleep(t_philo *philo, unsigned int micros)
+{
+	unsigned int	time_left;
+
+	time_left = philo->params->time_to_die;
+	time_left -= current_time_micros() - philo->last_eat;
+	if (micros > time_left)
+		micros = time_left;
+	usleep(micros);
 }
